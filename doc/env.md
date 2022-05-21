@@ -4,10 +4,10 @@
 ## 基础环境安装
 
 * [Golang](https://go.dev/doc/install)
-* [docker](https://docs.docker.com/engine/install/ubuntu/)
-* [kind](https://kind.sigs.k8s.io/)
-* [kubectl](https://kubernetes.io/docs/tasks/tools/install-kubectl-linux/)
-* [helm](https://helm.sh/docs/intro/install/#from-the-binary-releases)
+* [Docker](https://docs.docker.com/engine/install/ubuntu/)
+* [Kind](https://kind.sigs.k8s.io/)
+* [Kubectl](https://kubernetes.io/docs/tasks/tools/install-kubectl-linux/)
+* [Helm](https://helm.sh/docs/intro/install/#from-the-binary-releases)
 
 ## Golang
 
@@ -22,9 +22,9 @@ go env -w GO111MODULE=on
 
 ## docker
 
-* wsl ubuntu22.04tls iptables filed
+* 定于`sudo service docker start` 启动daemon报错：`wsl ubuntu22.04 iptables filed` 解决方法.
 
-`sudo update-alternatives --set iptables /usr/sbin/iptables-legacy`
+`sudo update-alternatives --set iptables /usr/sbin/iptables-legacy` or set `net.ipv4.ip_forward = 1` in `/etc/sysctl.conf`
 
 * [非root权限问题](https://www.digitalocean.com/community/questions/how-to-fix-docker-got-permission-denied-while-trying-to-connect-to-the-docker-daemon-socket)
 
