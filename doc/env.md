@@ -1,7 +1,118 @@
 
 # notice
 
-## VM
+## 基础环境安装
+
+* [Golang](https://go.dev/doc/install)
+* [docker](https://docs.docker.com/engine/install/ubuntu/)
+* [kind](https://kind.sigs.k8s.io/)
+* [kubectl](https://kubernetes.io/docs/tasks/tools/install-kubectl-linux/)
+* [helm](https://helm.sh/docs/intro/install/#from-the-binary-releases)
+
+## Golang
+
+* env
+
+```shell
+#使用国内镜像，避免无法访问
+go env -w GOPROXY=https://goproxy.cn,direct
+#自动跟踪软件包版本
+go env -w GO111MODULE=on
+```
+
+## docker
+
+* wsl ubuntu22.04tls iptables filed
+
+`sudo update-alternatives --set iptables /usr/sbin/iptables-legacy`
+
+* [非root权限问题](https://www.digitalocean.com/community/questions/how-to-fix-docker-got-permission-denied-while-trying-to-connect-to-the-docker-daemon-socket)
+
+```shell
+sudo gpasswd -a $USER docker #将登陆用户加入到docker用户组中
+newgrp docker #更新用户组
+```
+
+## Git
+
+* 基本配置
+
+```shell
+#使用国内镜像加速访问github
+git config --global url."https://hub.fastgit.xyz/".insteadOf https://github.com/
+
+#配置个人信息
+git config --global user.name "rongxin"
+git config --global user.email "rongxin@api7.ai"
+
+#github添加密钥并使用ssh方式提交
+#生成密钥，一路回车,把密钥放到github上
+ssh-keygen -o
+cat ~/.ssh/id_rsa.pub
+#测试能否连上
+ssh -T git@github.com
+```
+
+* 同步主仓库
+
+```shell
+#个人fork仓库同步主仓库
+git remote add upstream ${https://github.com??? 主仓库}
+git fetch upstream
+git merge upstream/master
+git push origin master
+```
+
+* 基本使用
+
+```shell
+#拉取仓库
+git clone ${ssh 项目}
+#查看更改
+git status
+#提交更改
+git add ${更改的文件或目录}
+git commit -m "${你的commit消息}"
+
+#更新本地仓库并推送
+git pull
+git push origin
+
+#强制提交
+git push -f origin
+
+* 常用命令
+
+```shell
+#查看commit记录
+git log
+
+#撤销某个commit的更改
+git revert ${commit_id}
+
+#查看历史更改信息
+git reflog
+
+#回退到某个历史版本
+git reset --mixed ${id}
+
+#合入某个版本
+git cherry-pick ${commit_id}
+
+#查看分支
+git branch
+
+#创建分支
+git branch ${分支名}
+
+#切换分支
+git checkout ${分支名} 
+
+#拉取远程分支，创建并切换到本地分支
+git checkout -b ${分支名} origin/${分支名}
+```
+
+## WSL
 
 * 压缩磁盘空间
  
@@ -16,31 +127,6 @@ compact vdisk
 detach vdisk
 
 exit
-```
-
-## docker
-
-* wsl ubuntu22.04tls iptables filed
-
-`sudo update-alternatives --set iptables /usr/sbin/iptables-legacy`
-
-## Git
-> 使用镜像加速github.com的访问  
-> git config --global url."https://hub.fastgit.xyz/".insteadOf https://github.com/  
->
-基本使用
-```shell
-#配置
-git config --global user.name "rongxin"
-git config --global user.email "rongxin@api7.ai"
-
-#同步个人库
-git remote add upstream https://github.com???
-git fetch upstream
-git merge upstream/master
-
-#push库
-git push origin 
 ```
 
 ## Ginkgo
