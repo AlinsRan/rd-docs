@@ -33,6 +33,16 @@ sudo gpasswd -a $USER docker #将登陆用户加入到docker用户组中
 newgrp docker #更新用户组
 ```
 
+* 通过`/etc/docker/daemon.json`加速访问docker仓库
+
+```json
+{
+    "registry-mirrors": ["https://registry.docker-cn.com","https://hub.daocloud.io","https://docker.mirrors.ustc.edu.cn"]
+}
+```
+
+* 通过`/var/log/docker.log` 查看docker日志
+
 ## Git
 
 * 基本配置
