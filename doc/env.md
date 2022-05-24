@@ -41,7 +41,7 @@ newgrp docker #更新用户组
 }
 ```
 
-* 通过`/var/log/docker.log` 查看docker日志
+* 通过`/var/log/docker.log`查看docker日志
 
 ## Git
 
@@ -52,8 +52,8 @@ newgrp docker #更新用户组
 git config --global url."https://hub.fastgit.xyz/".insteadOf https://github.com/
 
 #配置个人信息
-git config --global user.name "rongxin"
-git config --global user.email "rongxin@api7.ai"
+git config --global user.name "${name}"
+git config --global user.email "${email}"
 
 #github添加密钥并使用ssh方式提交
 #生成密钥，一路回车,把密钥放到github上
