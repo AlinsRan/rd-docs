@@ -43,6 +43,10 @@ newgrp docker #更新用户组
 
 * 通过`/var/log/docker.log`查看docker日志
 
+## Desktop
+
+* [wsl2 disk question](https://stackoverflow.com/questions/62441307/how-can-i-change-the-location-of-docker-images-when-using-docker-desktop-on-wsl2)
+ 
 ## Git
 
 * 基本配置
