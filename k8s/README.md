@@ -2,4 +2,8 @@
 
 ## Deployment
 
-* Install [APISIX Ingress](./deployment/ingress-apisix.yaml).
+### APISIX Ingress
+
+#### Install
+
+* kubectl apply -f [deployment.yaml](./deployment/ingress-apisix.yaml).
