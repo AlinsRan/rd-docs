@@ -1,0 +1,549 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: ingress-apisix
+
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: etcd-deployment
+  namespace: ingress-apisix
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: etcd-deployment
+  strategy:
+    rollingUpdate:
+      maxSurge: 50%
+      maxUnavailable: 1
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app: etcd-deployment
+    spec:
+      terminationGracePeriodSeconds: 0
+      containers:
+        - env:
+          - name: ALLOW_NONE_AUTHENTICATION
+            value: "yes"
+          livenessProbe:
+            failureThreshold: 3
+            initialDelaySeconds: 1
+            periodSeconds: 2
+            successThreshold: 1
+            tcpSocket:
+              port: 2379
+            timeoutSeconds: 2
+          readinessProbe:
+            failureThreshold: 3
+            initialDelaySeconds: 1
+            periodSeconds: 2
+            successThreshold: 1
+            tcpSocket:
+              port: 2379
+            timeoutSeconds: 2
+          image: "bitnami/etcd:3.4.15"
+          imagePullPolicy: IfNotPresent
+          name: etcd-deployment
+          ports:
+            - containerPort: 2379
+              name: "etcd"
+              protocol: "TCP"
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: etcd-client
+  namespace: ingress-apisix
+spec:
+  selector:
+    app: etcd-deployment
+  ports:
+    - name: etcd-client
+      port: 2379
+      protocol: TCP
+      targetPort: 2379
+  type: ClusterIP
+
+---
+
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: apisix-gw-config.yaml
+  namespace: ingress-apisix
+data:
+  config.yaml: |
+    apisix:
+      enable_control: true
+      enable_reuseport: true          # Enable nginx SO_REUSEPORT switch if set to true.
+      allow_admin:
+        - 127.0.0.0/24
+        - 0.0.0.0/0
+      port_admin: 9180
+      stream_proxy:                 # TCP/UDP proxy
+        only: false
+        tcp:                        # TCP proxy port list
+          - 9100
+          - addr: 9110
+            tls: true
+        udp:
+          - 9200
+    etcd:
+      host:                           # it's possible to define multiple etcd hosts addresses of the same etcd cluster.
+        - "http://etcd-client.ingress-apisix.svc.cluster.local:2379"    # multiple etcd address
+      prefix: "/apisix"               # apisix configurations prefix
+      timeout: 30                     # 30 seconds
+    plugin_attr:
+      prometheus:
+        enable_export_server: false
+
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: apisix-deployment
+  namespace: ingress-apisix
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: apisix-deployment
+  strategy:
+    rollingUpdate:
+      maxSurge: 50%
+      maxUnavailable: 1
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app: apisix-deployment
+    spec:
+      terminationGracePeriodSeconds: 0
+      containers:
+        - livenessProbe:
+            failureThreshold: 3
+            initialDelaySeconds: 1
+            periodSeconds: 2
+            successThreshold: 1
+            tcpSocket:
+              port: 9080
+            timeoutSeconds: 2
+          readinessProbe:
+            failureThreshold: 3
+            initialDelaySeconds: 1
+            periodSeconds: 2
+            successThreshold: 1
+            tcpSocket:
+              port: 9080
+            timeoutSeconds: 2
+          image: "apache/apisix:2.15.0-alpine"
+          imagePullPolicy: IfNotPresent
+          name: apisix-deployment
+          ports:
+            - containerPort: 9080
+              name: "http"
+              protocol: "TCP"
+            - containerPort: 9180
+              name: "http-admin"
+              protocol: "TCP"
+            - containerPort: 9443
+              name: "https"
+              protocol: "TCP"
+          volumeMounts:
+            - mountPath: /usr/local/apisix/conf/config.yaml
+              name: apisix-config-yaml-configmap
+              subPath: config.yaml
+      volumes:
+        - configMap:
+            name: apisix-gw-config.yaml
+          name: apisix-config-yaml-configmap
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: apisix-service
+  namespace: ingress-apisix
+spec:
+  selector:
+    app: apisix-deployment
+  ports:
+    - name: http
+      port: 9080
+      protocol: TCP
+      targetPort: 9080
+    - name: http-admin
+      port: 9180
+      protocol: TCP
+      targetPort: 9180
+    - name: https
+      port: 9443
+      protocol: TCP
+      targetPort: 9443
+    - name: tcp
+      port: 9100
+      protocol: TCP
+      targetPort: 9100
+    - name: tcp-tls
+      port: 9110
+      protocol: TCP
+      targetPort: 9110
+    - name: udp
+      port: 9200
+      protocol: UDP
+      targetPort: 9200
+    - name: http-control
+      port: 9090
+      protocol: TCP
+      targetPort: 9090
+  type: NodePort
+
+---
+
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: ingress-apisix-apisix-view-clusterrole
+  namespace: ingress-apisix
+rules:
+  - apiGroups:
+    - ""
+    resources:
+    - events
+    verbs:
+      - "*"
+  - apiGroups:
+      - ""
+    resources:
+      - configmaps
+      - endpoints
+      - persistentvolumeclaims
+      - pods
+      - replicationcontrollers
+      - replicationcontrollers/scale
+      - serviceaccounts
+      - services
+      - secrets
+    verbs:
+      - get
+      - list
+      - watch
+  - apiGroups:
+      - ""
+    resources:
+      - bindings
+      - limitranges
+      - namespaces/status
+      - pods/log
+      - pods/status
+      - replicationcontrollers/status
+      - resourcequotas
+      - resourcequotas/status
+    verbs:
+      - get
+      - list
+      - watch
+  - apiGroups:
+      - ""
+    resources:
+      - namespaces
+    verbs:
+      - get
+      - list
+      - watch
+  - apiGroups:
+      - apps
+    resources:
+      - controllerrevisions
+      - daemonsets
+      - deployments
+      - deployments/scale
+      - replicasets
+      - replicasets/scale
+      - statefulsets
+      - statefulsets/scale
+    verbs:
+      - get
+      - list
+      - watch
+  - apiGroups:
+      - autoscaling
+    resources:
+      - horizontalpodautoscalers
+    verbs:
+      - get
+      - list
+      - watch
+  - apiGroups:
+      - batch
+    resources:
+      - cronjobs
+      - jobs
+    verbs:
+      - get
+      - list
+      - watch
+  - apiGroups:
+      - extensions
+    resources:
+      - daemonsets
+      - deployments
+      - deployments/scale
+      - ingresses
+      - networkpolicies
+      - replicasets
+      - replicasets/scale
+      - replicationcontrollers/scale
+    verbs:
+      - get
+      - list
+      - watch
+  - apiGroups:
+      - policy
+    resources:
+      - poddisruptionbudgets
+    verbs:
+      - get
+      - list
+      - watch
+  - apiGroups:
+      - networking.k8s.io
+    resources:
+      - ingresses
+      - ingresses/status
+      - networkpolicies
+    verbs:
+      - '*'
+  - apiGroups:
+      - metrics.k8s.io
+    resources:
+      - pods
+    verbs:
+      - get
+      - list
+      - watch
+  - apiGroups:
+      - apisix.apache.org
+    resources:
+      - apisixroutes
+      - apisixroutes/status
+      - apisixupstreams
+      - apisixupstreams/status
+      - apisixtlses
+      - apisixtlses/status
+      - apisixclusterconfigs
+      - apisixclusterconfigs/status
+      - apisixconsumers
+      - apisixconsumers/status
+      - apisixpluginconfigs
+      - apisixpluginconfigs/status
+    verbs:
+      - '*'
+  - apiGroups:
+    - coordination.k8s.io
+    resources:
+    - leases
+    verbs:
+    - '*'
+  - apiGroups:
+    - discovery.k8s.io
+    resources:
+    - endpointslices
+    verbs:
+    - get
+    - list
+    - watch
+  - apiGroups:
+    - gateway.networking.k8s.io
+    resources:
+    - httproutes
+    - tlsroutes
+    - gateways
+    - gatewayclasses
+    verbs:
+    - get
+    - list
+    - watch
+
+---
+
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: ingress-apisix-service-account
+  namespace: ingress-apisix
+
+---
+
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: ingress-apisix-clusterrolebinding
+  namespace: ingress-apisix
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: ingress-apisix-apisix-view-clusterrole
+subjects:
+- kind: ServiceAccount
+  name: ingress-apisix-service-account
+  namespace: ingress-apisix
+
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ingress-apisix-controller-deployment
+  namespace: ingress-apisix
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ingress-apisix-controller-deployment
+  strategy:
+    rollingUpdate:
+      maxSurge: 50%
+      maxUnavailable: 1
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app: ingress-apisix-controller-deployment
+    spec:
+      terminationGracePeriodSeconds: 0
+      initContainers:
+      - name: wait-apisix-admin
+        image: busybox:1.28
+        imagePullPolicy: IfNotPresent
+        command: ['sh', '-c', "until nc -z apisix-service.ingress-apisix.svc.cluster.local 9180 ; do echo waiting for apisix-admin; sleep 2; done;"]
+      containers:
+        - livenessProbe:
+            failureThreshold: 3
+            initialDelaySeconds: 5
+            periodSeconds: 2
+            successThreshold: 1
+            tcpSocket:
+              port: 8080
+            timeoutSeconds: 2
+          readinessProbe:
+            failureThreshold: 3
+            initialDelaySeconds: 5
+            periodSeconds: 2
+            successThreshold: 1
+            tcpSocket:
+              port: 8080
+            timeoutSeconds: 2
+          env:
+            - name: POD_NAMESPACE
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.namespace
+            - name: POD_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+          image: "apache/apisix-ingress-controller:1.5.0-rc1"
+          imagePullPolicy: IfNotPresent
+          name: ingress-apisix-controller-deployment
+          ports:
+            - containerPort: 8080
+              name: "http"
+              protocol: "TCP"
+            - containerPort: 8443
+              name: "https"
+              protocol: "TCP"
+          command:
+            - /ingress-apisix/apisix-ingress-controller
+            - ingress
+            - --log-level
+            - debug
+            - --log-output
+            - stdout
+            - --http-listen
+            - :8080
+            - --https-listen
+            - :8443
+            - --default-apisix-cluster-name
+            - default
+            - --default-apisix-cluster-base-url
+            - http://apisix-service:9180/apisix/admin
+            - --default-apisix-cluster-admin-key
+            - edd1c9f034335f136f87ad84b625c8f1
+            - --namespace-selector
+            - apisix.ingress.watch=ingress-apisix
+      serviceAccount: ingress-apisix-service-account
+
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: httpbin-deployment
+  namespace: ingress-apisix
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: httpbin-deployment
+  strategy:
+    rollingUpdate:
+      maxSurge: 50%
+      maxUnavailable: 1
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app: httpbin-deployment
+    spec:
+      terminationGracePeriodSeconds: 0
+      containers:
+        - livenessProbe:
+            failureThreshold: 3
+            initialDelaySeconds: 2
+            periodSeconds: 5
+            successThreshold: 1
+            tcpSocket:
+              port: 80
+            timeoutSeconds: 2
+          readinessProbe:
+            failureThreshold: 3
+            initialDelaySeconds: 2
+            periodSeconds: 5
+            successThreshold: 1
+            tcpSocket:
+              port: 80
+            timeoutSeconds: 2
+          image: "kennethreitz/httpbin:latest"
+          imagePullPolicy: IfNotPresent
+          name: httpbin-deployment
+          ports:
+            - containerPort: 80
+              name: "http"
+              protocol: "TCP"
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: httpbin
+  namespace: ingress-apisix
+spec:
+  selector:
+    app: httpbin-deployment
+  ports:
+    - name: http
+      port: 80
+      protocol: TCP
+      targetPort: 80
+  type: ClusterIP
