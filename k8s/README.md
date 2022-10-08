@@ -1,5 +1,5 @@
 # Kuberntes
 
-## deployment
+## Deployment
 
-* [APISIX Ingress](./deployment/ingress-apisix.yaml)
+* Install [APISIX Ingress](./deployment/ingress-apisix.yaml).
