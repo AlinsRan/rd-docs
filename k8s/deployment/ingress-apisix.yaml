@@ -479,8 +479,6 @@ spec:
             - http://apisix-service:9180/apisix/admin
             - --default-apisix-cluster-admin-key
             - edd1c9f034335f136f87ad84b625c8f1
-            - --namespace-selector
-            - apisix.ingress.watch=ingress-apisix
       serviceAccount: ingress-apisix-service-account
 
 ---
