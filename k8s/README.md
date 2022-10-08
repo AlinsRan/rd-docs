@@ -1,4 +1,4 @@
-# Kuberntes
+# Kubernetes
 
 ## Deployment
 
