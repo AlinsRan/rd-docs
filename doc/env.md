@@ -22,6 +22,9 @@ go env -w GO111MODULE=on
 
 ## Docker
 
+
+### 常见问题
+
 * 定于`sudo service docker start` 启动daemon报错：`wsl ubuntu22.04 iptables filed` 解决方法.
 
 `sudo update-alternatives --set iptables /usr/sbin/iptables-legacy` or set `net.ipv4.ip_forward = 1` in `/etc/sysctl.conf`
@@ -32,6 +35,8 @@ go env -w GO111MODULE=on
 sudo gpasswd -a $USER docker #将登陆用户加入到docker用户组中
 newgrp docker #更新用户组
 ```
+
+* 通过`/var/log/docker.log`查看docker日志
 
 ### 镜像加速
 
@@ -44,7 +49,6 @@ newgrp docker #更新用户组
 }
 ```
 
-* 通过`/var/log/docker.log`查看docker日志
 
 ### Desktop
 
