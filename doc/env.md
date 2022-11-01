@@ -20,7 +20,7 @@ go env -w GOPROXY=https://goproxy.cn,direct
 go env -w GO111MODULE=on
 ```
 
-## docker
+## Docker
 
 * 定于`sudo service docker start` 启动daemon报错：`wsl ubuntu22.04 iptables filed` 解决方法.
 
@@ -43,7 +43,7 @@ newgrp docker #更新用户组
 
 * 通过`/var/log/docker.log`查看docker日志
 
-## Desktop
+### Desktop
 
 * [wsl2 disk question](https://stackoverflow.com/questions/62441307/how-can-i-change-the-location-of-docker-images-when-using-docker-desktop-on-wsl2)
  
