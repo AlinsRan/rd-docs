@@ -128,7 +128,20 @@ git checkout -b ${分支名} origin/${分支名}
 
 ## WSL
 
-* 压缩磁盘空间
+### 快照迁移
+
+```cmd
+#导出系统包到指定目录
+wsl --export Debian "D:\WSL\Debian\data.tar"
+
+#注销子系统
+wsl --unregister Debian
+
+##导入系统包 指定卷位置 目标系统包
+wsl --import Debian "D:\WSL\Debian" "D:\WSL\Debian\data.tar"
+```
+
+### 压缩磁盘空间
  
 > wsl 下vm不会自动缩容，docker堆积的内存，占用的磁盘空间. 需要主动释放。运行以下命令需要管理员权限。
 ```cmd
