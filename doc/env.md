@@ -33,7 +33,10 @@ sudo gpasswd -a $USER docker #将登陆用户加入到docker用户组中
 newgrp docker #更新用户组
 ```
 
-* 通过`/etc/docker/daemon.json`加速访问docker仓库
+### 镜像加速
+
+* 编辑 `/etc/docker/daemon.json` 配置
+* 使用国内镜像加速访问 dockerhub 仓库
 
 ```json
 {
