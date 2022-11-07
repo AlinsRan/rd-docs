@@ -22,7 +22,6 @@ go env -w GO111MODULE=on
 
 ## Docker
 
-
 ### 常见问题
 
 * 定于`sudo service docker start` 启动daemon报错：`wsl ubuntu22.04 iptables filed` 解决方法.
@@ -45,15 +44,20 @@ newgrp docker #更新用户组
 
 ```json
 {
-    "registry-mirrors": ["https://registry.docker-cn.com","https://hub.daocloud.io","https://docker.mirrors.ustc.edu.cn"]
+    "registry-mirrors": [
+      "https://registry.docker-cn.com",
+      "https://hub.daocloud.io",
+      "https://docker.mirrors.ustc.edu.cn",
+      "https://mirror.baidubce.com",
+      "https://wnjouq7m.mirror.aliyuncs.com"  //个人阿里云镜像
+    ]
 }
 ```
-
 
 ### Desktop
 
 * [wsl2 disk question](https://stackoverflow.com/questions/62441307/how-can-i-change-the-location-of-docker-images-when-using-docker-desktop-on-wsl2)
- 
+
 ## Git
 
 * 基本配置
@@ -149,8 +153,9 @@ wsl --import Debian "D:\WSL\Debian" "D:\WSL\Debian\data.tar"
 ```
 
 ### 压缩磁盘空间
- 
+
 > wsl 下vm不会自动缩容，docker堆积的内存，占用的磁盘空间. 需要主动释放。运行以下命令需要管理员权限。
+
 ```cmd
 diskpart
 
@@ -164,10 +169,11 @@ exit
 ```
 
 ## Ginkgo
-- 聚焦或跳过spec
-  - --skipMeasurements
+
+* 聚焦或跳过spec
+  * --skipMeasurements
 如果设置该参数，Ginkgo 会跳过任何你定义的 Measure spec 。
-  - --focus=REGEXP
+  * --focus=REGEXP
 如果设置该参数，Ginkgo 只会运行带有符合正则表达式 REGEXP 的描述的 spec。
-  - --skip=REGEXP
+  * --skip=REGEXP
 如果设置该参数，Ginkgo 只会运行不有符合正则表达式 REGEXP 的描述的 spec。
