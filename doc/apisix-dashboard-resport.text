@@ -1,0 +1,113 @@
+
+apache/apisix-dashboard:2.15.0-alpine (alpine 3.17.0)
+=====================================================
+Total: 18 (UNKNOWN: 0, LOW: 0, MEDIUM: 4, HIGH: 14, CRITICAL: 0)
+
+┌────────────┬───────────────┬──────────┬───────────────────┬───────────────┬──────────────────────────────────────────────────────────────┐
+│  Library   │ Vulnerability │ Severity │ Installed Version │ Fixed Version │                            Title                             │
+├────────────┼───────────────┼──────────┼───────────────────┼───────────────┼──────────────────────────────────────────────────────────────┤
+│ libcrypto3 │ CVE-2022-3996 │ HIGH     │ 3.0.7-r0          │ 3.0.7-r2      │ openssl: double locking leads to denial of service           │
+│            │               │          │                   │               │ https://avd.aquasec.com/nvd/cve-2022-3996                    │
+│            ├───────────────┤          │                   ├───────────────┼──────────────────────────────────────────────────────────────┤
+│            │ CVE-2022-4450 │          │                   │ 3.0.8-r0      │ The function PEM_read_bio_ex() reads a PEM file from a BIO   │
+│            │               │          │                   │               │ and parses...                                                │
+│            │               │          │                   │               │ https://avd.aquasec.com/nvd/cve-2022-4450                    │
+│            ├───────────────┤          │                   │               ├──────────────────────────────────────────────────────────────┤
+│            │ CVE-2023-0215 │          │                   │               │ The public API function BIO_new_NDEF is a helper function    │
+│            │               │          │                   │               │ used for str...                                              │
+│            │               │          │                   │               │ https://avd.aquasec.com/nvd/cve-2023-0215                    │
+│            ├───────────────┤          │                   │               ├──────────────────────────────────────────────────────────────┤
+│            │ CVE-2023-0216 │          │                   │               │ An invalid pointer dereference on read can be triggered when │
+│            │               │          │                   │               │ an applic...                                                 │
+│            │               │          │                   │               │ https://avd.aquasec.com/nvd/cve-2023-0216                    │
+│            ├───────────────┤          │                   │               ├──────────────────────────────────────────────────────────────┤
+│            │ CVE-2023-0217 │          │                   │               │ An invalid pointer dereference on read can be triggered when │
+│            │               │          │                   │               │ an applic...                                                 │
+│            │               │          │                   │               │ https://avd.aquasec.com/nvd/cve-2023-0217                    │
+│            ├───────────────┤          │                   │               ├──────────────────────────────────────────────────────────────┤
+│            │ CVE-2023-0286 │          │                   │               │ There is a type confusion vulnerability relating to X.400    │
+│            │               │          │                   │               │ address proc ......                                          │
+│            │               │          │                   │               │ https://avd.aquasec.com/nvd/cve-2023-0286                    │
+│            ├───────────────┤          │                   │               ├──────────────────────────────────────────────────────────────┤
+│            │ CVE-2023-0401 │          │                   │               │ A NULL pointer can be dereferenced when signatures are being │
+│            │               │          │                   │               │ verified ...                                                 │
+│            │               │          │                   │               │ https://avd.aquasec.com/nvd/cve-2023-0401                    │
+│            ├───────────────┼──────────┤                   │               ├──────────────────────────────────────────────────────────────┤
+│            │ CVE-2022-4203 │ MEDIUM   │                   │               │ [openssl: X.509 Name Constraints Read Buffer Overflow]       │
+│            │               │          │                   │               │ https://avd.aquasec.com/nvd/cve-2022-4203                    │
+│            ├───────────────┤          │                   │               ├──────────────────────────────────────────────────────────────┤
+│            │ CVE-2022-4304 │          │                   │               │ A timing based side channel exists in the OpenSSL RSA        │
+│            │               │          │                   │               │ Decryption imple...                                          │
+│            │               │          │                   │               │ https://avd.aquasec.com/nvd/cve-2022-4304                    │
+├────────────┼───────────────┼──────────┤                   ├───────────────┼──────────────────────────────────────────────────────────────┤
+│ libssl3    │ CVE-2022-3996 │ HIGH     │                   │ 3.0.7-r2      │ openssl: double locking leads to denial of service           │
+│            │               │          │                   │               │ https://avd.aquasec.com/nvd/cve-2022-3996                    │
+│            ├───────────────┤          │                   ├───────────────┼──────────────────────────────────────────────────────────────┤
+│            │ CVE-2022-4450 │          │                   │ 3.0.8-r0      │ The function PEM_read_bio_ex() reads a PEM file from a BIO   │
+│            │               │          │                   │               │ and parses...                                                │
+│            │               │          │                   │               │ https://avd.aquasec.com/nvd/cve-2022-4450                    │
+│            ├───────────────┤          │                   │               ├──────────────────────────────────────────────────────────────┤
+│            │ CVE-2023-0215 │          │                   │               │ The public API function BIO_new_NDEF is a helper function    │
+│            │               │          │                   │               │ used for str...                                              │
+│            │               │          │                   │               │ https://avd.aquasec.com/nvd/cve-2023-0215                    │
+│            ├───────────────┤          │                   │               ├──────────────────────────────────────────────────────────────┤
+│            │ CVE-2023-0216 │          │                   │               │ An invalid pointer dereference on read can be triggered when │
+│            │               │          │                   │               │ an applic...                                                 │
+│            │               │          │                   │               │ https://avd.aquasec.com/nvd/cve-2023-0216                    │
+│            ├───────────────┤          │                   │               ├──────────────────────────────────────────────────────────────┤
+│            │ CVE-2023-0217 │          │                   │               │ An invalid pointer dereference on read can be triggered when │
+│            │               │          │                   │               │ an applic...                                                 │
+│            │               │          │                   │               │ https://avd.aquasec.com/nvd/cve-2023-0217                    │
+│            ├───────────────┤          │                   │               ├──────────────────────────────────────────────────────────────┤
+│            │ CVE-2023-0286 │          │                   │               │ There is a type confusion vulnerability relating to X.400    │
+│            │               │          │                   │               │ address proc ......                                          │
+│            │               │          │                   │               │ https://avd.aquasec.com/nvd/cve-2023-0286                    │
+│            ├───────────────┤          │                   │               ├──────────────────────────────────────────────────────────────┤
+│            │ CVE-2023-0401 │          │                   │               │ A NULL pointer can be dereferenced when signatures are being │
+│            │               │          │                   │               │ verified ...                                                 │
+│            │               │          │                   │               │ https://avd.aquasec.com/nvd/cve-2023-0401                    │
+│            ├───────────────┼──────────┤                   │               ├──────────────────────────────────────────────────────────────┤
+│            │ CVE-2022-4203 │ MEDIUM   │                   │               │ [openssl: X.509 Name Constraints Read Buffer Overflow]       │
+│            │               │          │                   │               │ https://avd.aquasec.com/nvd/cve-2022-4203                    │
+│            ├───────────────┤          │                   │               ├──────────────────────────────────────────────────────────────┤
+│            │ CVE-2022-4304 │          │                   │               │ A timing based side channel exists in the OpenSSL RSA        │
+│            │               │          │                   │               │ Decryption imple...                                          │
+│            │               │          │                   │               │ https://avd.aquasec.com/nvd/cve-2022-4304                    │
+└────────────┴───────────────┴──────────┴───────────────────┴───────────────┴──────────────────────────────────────────────────────────────┘
+
+usr/local/apisix-dashboard/manager-api (gobinary)
+=================================================
+Total: 8 (UNKNOWN: 0, LOW: 1, MEDIUM: 1, HIGH: 6, CRITICAL: 0)
+
+┌──────────────────────────┬────────────────┬──────────┬────────────────────────────────────┬─────────────────────────────────────┬──────────────────────────────────────────────────────────────┐
+│         Library          │ Vulnerability  │ Severity │         Installed Version          │            Fixed Version            │                            Title                             │
+├──────────────────────────┼────────────────┼──────────┼────────────────────────────────────┼─────────────────────────────────────┼──────────────────────────────────────────────────────────────┤
+│ github.com/gin-gonic/gin │ CVE-2020-28483 │ HIGH     │ v1.6.3                             │ 1.7.7                               │ gin: HTTP response splitting                                 │
+│                          │                │          │                                    │                                     │ https://avd.aquasec.com/nvd/cve-2020-28483                   │
+├──────────────────────────┼────────────────┤          ├────────────────────────────────────┼─────────────────────────────────────┼──────────────────────────────────────────────────────────────┤
+│ github.com/tidwall/gjson │ CVE-2021-42248 │          │ v1.6.7                             │ 1.9.3                               │ GJSON &lt;= 1.9.2 allows attackers to cause a redos via      │
+│                          │                │          │                                    │                                     │ crafted JSON...                                              │
+│                          │                │          │                                    │                                     │ https://avd.aquasec.com/nvd/cve-2021-42248                   │
+│                          ├────────────────┤          │                                    │                                     ├──────────────────────────────────────────────────────────────┤
+│                          │ CVE-2021-42836 │          │                                    │                                     │ GJSON before 1.9.3 allows a ReDoS (regular expression denial │
+│                          │                │          │                                    │                                     │ of servic ......                                             │
+│                          │                │          │                                    │                                     │ https://avd.aquasec.com/nvd/cve-2021-42836                   │
+├──────────────────────────┼────────────────┤          ├────────────────────────────────────┼─────────────────────────────────────┼──────────────────────────────────────────────────────────────┤
+│ golang.org/x/net         │ CVE-2022-27664 │          │ v0.0.0-20220826154423-83b083e8dc8b │ 0.0.0-20220906165146-f3363e06e74c   │ golang: net/http: handle server errors after sending GOAWAY  │
+│                          │                │          │                                    │                                     │ https://avd.aquasec.com/nvd/cve-2022-27664                   │
+│                          ├────────────────┤          │                                    ├─────────────────────────────────────┼──────────────────────────────────────────────────────────────┤
+│                          │ CVE-2022-41721 │          │                                    │ 0.1.1-0.20221104162952-702349b0e862 │ A request smuggling attack is possible when using            │
+│                          │                │          │                                    │                                     │ MaxBytesHandler. Whe ...                                     │
+│                          │                │          │                                    │                                     │ https://avd.aquasec.com/nvd/cve-2022-41721                   │
+│                          ├────────────────┼──────────┤                                    ├─────────────────────────────────────┼──────────────────────────────────────────────────────────────┤
+│                          │ CVE-2022-41717 │ MEDIUM   │                                    │ 0.4.0                               │ golang: net/http: An attacker can cause excessive memory     │
+│                          │                │          │                                    │                                     │ growth in a Go...                                            │
+│                          │                │          │                                    │                                     │ https://avd.aquasec.com/nvd/cve-2022-41717                   │
+│                          ├────────────────┼──────────┤                                    ├─────────────────────────────────────┼──────────────────────────────────────────────────────────────┤
+│                          │ CVE-2022-41723 │ LOW      │                                    │ 0.7.0                               │ [http2/hpack: avoid quadratic complexity in hpack decoding]  │
+│                          │                │          │                                    │                                     │ https://avd.aquasec.com/nvd/cve-2022-41723                   │
+├──────────────────────────┼────────────────┼──────────┼────────────────────────────────────┼─────────────────────────────────────┼──────────────────────────────────────────────────────────────┤
+│ golang.org/x/text        │ CVE-2022-32149 │ HIGH     │ v0.3.7                             │ 0.3.8                               │ golang: golang.org/x/text/language: ParseAcceptLanguage      │
+│                          │                │          │                                    │                                     │ takes a long time to parse complex tags                      │
+│                          │                │          │                                    │                                     │ https://avd.aquasec.com/nvd/cve-2022-32149                   │
+└──────────────────────────┴────────────────┴──────────┴────────────────────────────────────┴─────────────────────────────────────┴──────────────────────────────────────────────────────────────┘
