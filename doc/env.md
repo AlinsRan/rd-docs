@@ -28,10 +28,11 @@ go env -w GO111MODULE=on
 
 `sudo update-alternatives --set iptables /usr/sbin/iptables-legacy` or set `net.ipv4.ip_forward = 1` in `/etc/sysctl.conf`
 
-* [非root权限问题](https://www.digitalocean.com/community/questions/how-to-fix-docker-got-permission-denied-while-trying-to-connect-to-the-docker-daemon-socket)
+* [非root权限问题](https://docs.docker.com/engine/install/linux-postinstall/#manage-docker-as-a-non-root-user)
 
 ```shell
-sudo gpasswd -a $USER docker #将登陆用户加入到docker用户组中
+sudo groupadd docker
+sudo usermod -aG docker $USER #将登陆用户加入到docker用户组中
 newgrp docker #更新用户组
 ```
 
